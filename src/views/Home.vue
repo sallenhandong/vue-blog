@@ -1,0 +1,138 @@
+<template>
+  <div id="home" class="home" @mousewheel="onMouseWheel" @DOMMouseScroll="onMouseWheel">
+      <div id="scroller" class="scroller">
+          <ul class="scroll-wrapper">
+         <!--      <li v-if="isPc" class="scroll-page"><Page1 :pageNow="pageNow"></Page1></li> -->
+              <li class="scroll-page"><Page2 :pageNow="pageNow"></Page2></li>
+              <li v-if="isPc" class="scroll-page foot-page"><Page3 :pageNow="pageNow"></Page3></li>
+          </ul>
+      </div>
+  </div>
+</template>
+
+<script>
+import { isPc } from "../util/tools";
+import IScroll from "iscroll";
+import Page1 from "./homePages/Page1.vue";
+import Page2 from "./homePages/Page2.vue";
+import Page3 from "./homePages/Page3.vue";
+import Header from "../components/Header.vue";
+import { mapState } from "vuex";
+export default {
+  name: "home",
+  data: function() {
+    return {
+      isPc: isPc(),
+      scrollDom: null,
+      scrolling: false, // 是否正在滚动中
+      pageNow: 0,
+    };
+  },
+  props: {},
+  components: {
+    Header,
+    Page1,
+    Page2,
+    Page3
+  },
+  computed: {
+    ...mapState({
+    })
+  },
+  mounted: function() {
+    /** PC端才初始化iscroll和声音 **/
+    if (this.isPc) {
+      this.initScroll();
+    }
+    /** 获取博客配置信息 **/
+    this.getBlogConfig();
+    /** 获取博客列表 **/
+    this.getBlogList();
+  },
+  beforeDestroy: function() {
+    /** 离开前销毁iscroll实例 **/
+    this.scrollDom && this.scrollDom.destroy();
+  },
+  methods: {
+    /** 初始化页面全局滚动 **/
+    initScroll() {
+      this.scrollDom = new IScroll("#scroller", {
+        snap: true,
+        bounceEasing: {
+          style: "cubic-bezier(1,0.1,0.1,1)"
+        },
+        bounceTime: 1000,
+        preventDefault: true,
+        disablePointer: true
+      });
+      this.scrollDom.on("scrollEnd", () => {
+        this.scrolling = false;
+      });
+    },
+    /** 监听滚轮事件处理页面滚动 **/
+    onMouseWheel(e) {
+      // console.log("有在触发吗,IE", e);
+      const f = e.wheelDeltaY || -e.detail || e.wheelDelta;
+      if (this.scrolling) {
+        return;
+      }
+
+      if (f < 0 && this.pageNow < 2) {
+        // 向下滚动
+        this.scrolling = true;
+        this.pageNow++;
+        this.scrollDom && this.scrollDom.goToPage(1, this.pageNow, 1000);
+        // console.log("滚动：", this.scrollDom);
+      } else if (f > 0 && this.pageNow > 0) {
+        // 向上滚动
+        this.scrolling = true;
+        this.pageNow--;
+        this.scrollDom && this.scrollDom.goToPage(1, this.pageNow, 1000);
+      }
+    },
+    /** 进入页面获取博客配置信息 **/
+    getBlogConfig() {
+      this.$store.dispatch({
+        type: "app/getBlogConfig",
+        params: null
+      });
+    },
+    /** 进入页面及获取所有文章列表 **/
+    getBlogList() {
+      this.$store.dispatch({
+        type: "app/getBlogList",
+        params: null
+      });
+    }
+  },
+  watch: {
+  }
+};
+</script>
+
+<style scoped lang="less">
+.home {
+  background-color: #222;
+  overflow: hidden;
+  .scroller {
+    height: 100vh;
+    min-height: 300px;
+    display: block;
+    overflow: hidden;
+    .scroll-wrapper {
+      display: block;
+      width: 100%;
+      .scroll-page {
+        display: block;
+        width: 100%;
+        height: 100vh;
+        min-height: 300px;
+        background-color: #fff;
+        &.foot-page {
+          height: 300px;
+        }
+      }
+    }
+  }
+}
+</style>
