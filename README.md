@@ -36,7 +36,8 @@ This my url you can clone https://github.com/sallenhandong/sallenhandong.github.
 }
 
 ```
-#### 2. clone this project and build
+#### 2. clone this project and build 
+## you need install node  and yarn
 ## Project setup
 ```
 yarn install
