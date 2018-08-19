@@ -1,30 +1,28 @@
 <template>
     <div class="page-detail" :v-loading="true">
         <vue-topprogress ref="topProgress"></vue-topprogress>
-        <div id="home" class="home">
-            <div id="scroller" class="scroller">
-                <ul class="scroll-wrapper">
-                    <li v-if="isPc" class="scroll-page">
-                        <PageDetail :pageNow="pageNow"></PageDetail>
-                    </li>
-                </ul>
-            </div>
+        <div class="page1">
+            <div class="shadow all_trans1s"></div>
+            <PageDetail :pageNow="pageNow"></PageDetail>
         </div>
         <div v-if="!sourceData" class="loading-box">
             <img :src="ImgLoading" />
             <div>正在获取请稍候…</div>
         </div>
         <div ref="theBody" v-html="htmlData" class="the-body markdown-body editormd-html-preview"></div>
-        <img :src="qrcode" class="zanshang" />
-        <p class="zhichi">若你觉得我的文章对你有帮助,欢迎点击扫描上方二维码对我打赏</p>
-        <share :config="Sconfig"></share>
-        <span>感谢您花费时间阅读这篇文章！祝您在这里记录、阅读、分享愉快！</span>
-        <br>
-        <br>
-        <span>作者@{{blogName}}</span>
-        <br>
-        <br>
-        <span>{{blogSignature}}</span>
+        <div class="shareAndPay">
+            <img :src="qrcode" class="zanshang" />
+            <p class="content">若你觉得我的文章对你有帮助,欢迎点击扫描上方二维码对我打赏</p>
+            <qr-code :text="shareUrl" size="100" color="black" class="shareView"></qr-code>
+            <p class="content">扫描二维码,分享此文章</p>
+            <div class="line"></div>
+        </div>
+        <div class="profile">
+            <img :src="headImage" class="headImage">
+            <span class="nickName">{{blogName}}</span>
+            <span class="introduce">{{introduce}}</span>
+            <span class="address">Shanghai「上海」<a href="https://slimsallen.com">https://slimsallen.com</a></span>
+        </div>
         <div class="the-end">--<span>End</span>--</div>
         <vm-back-top :bottom="100" :duration="1000" :timing="'ease'">
             <div class="top">返回顶端</div>
@@ -39,7 +37,7 @@ import { isPc } from "../../util/tools";
 import IScroll from "iscroll";
 import PageDetail from "../homePages/PageDetail.vue";
 import "gitment/style/default.css";
-import { masterName, blogName, blogSignature,moneyQrcode} from "../../config";
+import { masterName, blogName, blogSignature, moneyQrcode, headImage, introduce } from "../../config";
 import ShowDown from "showdown";
 import Gitment from "gitment";
 import ImgLoading from "../../assets/loading.gif";
@@ -47,6 +45,8 @@ import { Button, Breadcrumb, BreadcrumbItem } from "element-ui";
 import Vue from 'vue'
 import Share from 'vue-social-share'
 import { vueTopprogress } from 'vue-top-progress'
+import VueQRCodeComponent from 'vue-qrcode-component'
+Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(Share)
 export default {
     name: "live",
@@ -59,9 +59,12 @@ export default {
             scrollDom: null,
             scrolling: false, // 是否正在滚动中
             pageNow: { title: "", info: "", date: "", pic: "" },
-            blogName:"",
-            blogSignature:"",
-            qrcode:""
+            blogName: "",
+            blogSignature: "",
+            qrcode: "",
+            shareUrl: "",
+            headImage: "",
+            introduce: ""
         };
     },
 
@@ -114,7 +117,7 @@ export default {
                 document.title = data.title;
                 return b.find(item => item.gitname === id) || { title: id };
             },
-          
+
         })
     },
     methods: {
@@ -156,6 +159,9 @@ export default {
                         this.blogName = blogName;
                         this.blogSignature = blogSignature;
                         this.qrcode = moneyQrcode;
+                        this.shareUrl = "https://slimsallen.com/#/detail/" + result.gitname;
+                        this.headImage = headImage;
+                        this.introduce = introduce;
                     }
                 });
 
@@ -173,7 +179,7 @@ export default {
                     }
                 });
         },
- }
+    }
 };
 </script>
 <style lang="less">
@@ -234,14 +240,9 @@ export default {
 }
 
 .zanshang {
-    position: absolute;
-    left: 50%;
     margin-top: 5px;
-    /* 高度的一半 */
-    margin-left: -25px;
-    /* 宽度的一半 */
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
 }
 
 .zhichi {
@@ -284,6 +285,85 @@ export default {
     height: 100px;
     /*        text-align: center;*/
     border-radius: 2px;
+}
+
+.page1 {
+
+    height: 400px;
+    background-size: cover;
+    background-position: top center;
+    margin-bottom: 20px;
+    margin-left: -40px;
+    margin-right: -40px;
+    margin-top: -40px;
+}
+
+.shareAndPay {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .line {
+        background-color: lightgray;
+        margin-top: 20px;
+        height: 1px;
+        width: 100%;
+    }
+}
+
+.content {
+    font-size: 13px;
+    font-style: italic;
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    text-align: center;
+    color: #595959;
+}
+
+.shareView {
+    margin-top: 20px;
+}
+
+.profile {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    .nickName {
+        font-size: 22px;
+        color: #999;
+        margin-top: 20px;
+    }
+    .introduce {
+        margin-top: 20px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .headImage {
+        width: 80px;
+        height: 80px;
+        border-radius: 100%;
+        background-position: center center;
+        background-size: cover;
+        border: solid 3px rgba(211, 211, 211, 0.3);
+    }
+    a {
+        font-size: 15px;
+        font-style: italic;
+        color: #999;
+        margin-left: 10px;
+        &:hover{
+            color:black;
+        };
+    }
+    .address {
+        font-size: 13px;
+        font-style: italic;
+    }
 }
 
 @media only screen and (max-width: 640px) {

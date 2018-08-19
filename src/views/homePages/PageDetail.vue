@@ -116,15 +116,18 @@ export default {
     }
     .title {
       display: block;
-      font-size: 36px;
+      font-size: 27px;
       letter-spacing: 2px;
       color: #f0f0f0;
       margin-bottom: 32px;
+      text-align: center;
       transition-delay: 0.6s;
       opacity: 0;
+      margin-left: 80px;
+      margin-right: 80px;
     }
     .detail{
-         display: block;
+      display: block;
       font-size: 15px;
       letter-spacing: 2px;
       color: #f0f0f0;
@@ -153,7 +156,8 @@ export default {
 
   }
   .backBtn{
-    left: 0px;
+    left: 60px;
+    top: 45px;
     width: 100px;
      z-index: 3;
 
