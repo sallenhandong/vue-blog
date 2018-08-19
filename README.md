@@ -2,9 +2,8 @@
 #### Here is what you need to do.
 #### 1. Create a repo named your_user_name.github.io
 This my url you can clone https://github.com/sallenhandong/sallenhandong.github.io  
-you need edit cofig.json  
-this is data format  
-Tags.type needs to correspond to d.type.  
+ - you need edit cofig.json  
+ - Tags.type needs to correspond to d.type.  
 ```
 {
   "d": [
