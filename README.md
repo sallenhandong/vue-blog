@@ -1,4 +1,4 @@
-# hello-world
+# With Simple and github pages you can easily create your static blog. Here is what you need to do.
 
 ## Project setup
 ```
