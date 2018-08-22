@@ -25,6 +25,8 @@ yarn run build
 
 - 首页两种样式 config文件中设置
 - 适配手机
+- 关于
+- 归档
 
 
 ## To Do List
