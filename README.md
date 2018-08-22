@@ -2,7 +2,7 @@
 > vue + github 快速创建博客
 ### [点此预览](http://slimsallen.com
 ## 功能预览
-
+![image](http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155441-HD.gif)
 <iframe height=500 width=500 src="http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155441-HD.gif">
  <iframe height=500 width=500 src="http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155952-HD.gif">
 
