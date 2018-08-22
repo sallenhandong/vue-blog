@@ -21,7 +21,10 @@ yarn run serve
 ```
 yarn run build
 ```
+### 0.0.1 特性
 
+- 首页两种样式 config文件中设置
+- 适配手机
 
 
 ## To Do List
