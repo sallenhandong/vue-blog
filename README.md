@@ -3,8 +3,8 @@
 ### [点此预览](http://slimsallen.com
 ## 功能预览
 
-![](http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155441-HD.gif)
-![](http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155952-HD.gif)
+<iframe height=500 width=500 src="http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155441-HD.gif">
+ <iframe height=500 width=500 src="http://otfgrdvwb.bkt.clouddn.com/QQ20180822-155952-HD.gif">
 
 #### 1. 首先创建repo 名字就是your_user_name.github.io
 或者clone https://github.com/sallenhandong/sallenhandong.github.io  
