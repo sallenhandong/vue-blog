@@ -25,8 +25,20 @@ yarn run serve
 ```
 yarn run build
 ```
-### To Do
-- add templete
-- Optimized style
-- change Archive style
+
+
+
+## To Do List
+
+- [x] 活跃度表格
+
+- [x] 代码高亮
+
+- [x] 标签系统
+
+- [x] 个人信息面板
+
+- [x] 优化样式
+
+- [x] 服务端实现后台管理
 
