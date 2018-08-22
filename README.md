@@ -1,6 +1,7 @@
 #### Slim Sallen blog
 > vue + github 快速创建博客
 ### [点此预览](http://slimsallen.com)
+刚入前端不久，学习中，希望能做出一款漂亮的博客 哈哈哈哈 
 #### 1. 首先创建repo 名字就是your_user_name.github.io
 或者clone https://github.com/sallenhandong/sallenhandong.github.io  
  - blog存放博客 
