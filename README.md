@@ -1,42 +1,15 @@
-#### With Simple and github pages you can easily create your static blog. 
-#### Here is what you need to do.
-#### 1. Create a repo named your_user_name.github.io
-This my url you can clone https://github.com/sallenhandong/sallenhandong.github.io  
- - you need edit cofig.json  
- - Tags.type needs to correspond to d.type.  
-```
-{
-  "d": [
-    {
-      "gitname": "ios.md",
-      "type": 0,
-      "title": "ios",
-      "tags": ["文章", "JS"],
-      "pic": " ",
-      "info": "ios",
-      "date": "2018/02/28"
-    }
-    
-  ],
-  "t": [
-    {
-      "tags": [{
-        "name":"iOS",
-        "count":1,
-        "type":0
-      }, 
-        {
-        "name":"JavaScript",
-        "count":0,
-        "type":0
-      }]
-    }
-    
-  ]
-}
-
-```
+#### Slim Sallen blog
+> vue + github 快速创建博客
+### [点此预览](http://slimsallen.com)
+样式预览
+![](http://otfgrdvwb.bkt.clouddn.com/WechatIMG128.jpeg)
+![](http://otfgrdvwb.bkt.clouddn.com/WechatIMG129.jpeg)
+![](http://otfgrdvwb.bkt.clouddn.com/0A2271B2-862C-451C-A2CE-3C0BCD9D86A0)
+#### 1. 首先创建repo 名字就是your_user_name.github.io
+或者clone https://github.com/sallenhandong/sallenhandong.github.io  
+ - blog存放博客 
 #### 2. clone this project and build 
+修改config文件
 - #### you need install node  and yarn
 ## Project setup
 ```
