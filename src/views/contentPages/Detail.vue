@@ -2,14 +2,15 @@
     <div class="page-detail" :v-loading="true">
         <vue-topprogress ref="topProgress"></vue-topprogress>
         <div class="page1">
-            <div class="shadow all_trans1s"></div>
             <PageDetail :pageNow="pageNow"></PageDetail>
         </div>
         <div v-if="!sourceData" class="loading-box">
             <img :src="ImgLoading" />
             <div>正在获取请稍候…</div>
         </div>
-        <div ref="theBody" v-html="htmlData" class="the-body markdown-body editormd-html-preview"></div>
+<!--         <div v-html="htmlData" v-highlight>
+        </div> -->
+         <div ref="theBody" v-html="htmlData" class="the-body markdown-body editormd-html-preview"></div>
         <div class="shareAndPay">
             <img :src="qrcode" class="zanshang" />
             <p class="content">若你觉得我的文章对你有帮助,欢迎点击扫描上方二维码对我打赏</p>
@@ -21,13 +22,12 @@
             <img :src="headImage" class="headImage">
             <span class="nickName">{{blogName}}</span>
             <span class="introduce">{{introduce}}</span>
-            <span class="address">Shanghai「上海」<a href="https://slimsallen.com">https://slimsallen.com</a></span>
+            <span class="address">{{address}}<a  target="_blank" :href="blogLink" >{{blogLink}}</a></span>
         </div>
         <div class="the-end">--<span>End</span>--</div>
-        <vm-back-top :bottom="100" :duration="1000" :timing="'ease'">
-            <div class="top">返回顶端</div>
-        </vm-back-top>
-        <!--     <div id="gitment-box" class="gitment-box"></div> -->
+              <vm-back-top :bottom="100" :duration="1000" :timing="'ease'">
+    <div class="top"><img :src="backTopImage"></div>
+  </vm-back-top>
     </div>
 </template>
 <script>
@@ -37,7 +37,7 @@ import { isPc } from "../../util/tools";
 import IScroll from "iscroll";
 import PageDetail from "../homePages/PageDetail.vue";
 import "gitment/style/default.css";
-import { masterName, blogName, blogSignature, moneyQrcode, headImage, introduce } from "../../config";
+import { masterName, blogName, blogSignature, moneyQrcode, headImage, introduce,backTopImage ,blogLink,address} from "../../config";
 import ShowDown from "showdown";
 import Gitment from "gitment";
 import ImgLoading from "../../assets/loading.gif";
@@ -46,6 +46,10 @@ import Vue from 'vue'
 import Share from 'vue-social-share'
 import { vueTopprogress } from 'vue-top-progress'
 import VueQRCodeComponent from 'vue-qrcode-component'
+import VmBackTop from 'vue-multiple-back-top'
+import VueMarkdown from 'vue-markdown'
+import hljs from 'highlight.js';
+Vue.component(VmBackTop.name, VmBackTop)
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(Share)
 export default {
@@ -64,7 +68,10 @@ export default {
             qrcode: "",
             shareUrl: "",
             headImage: "",
-            introduce: ""
+            introduce: "",
+            content: "",
+            backTopImage:"",
+            address:""
         };
     },
 
@@ -73,7 +80,8 @@ export default {
         Breadcrumb,
         BreadcrumbItem,
         PageDetail,
-        vueTopprogress
+        vueTopprogress,
+        VueMarkdown
     },
     mounted() {
         // console.log("router:", this.$route.params.id);
@@ -162,6 +170,9 @@ export default {
                         this.shareUrl = "https://slimsallen.com/#/detail/" + result.gitname;
                         this.headImage = headImage;
                         this.introduce = introduce;
+                        this.backTopImage = backTopImage;
+                        this.blogLink = blogLink;
+                        this.address = address;
                     }
                 });
 
@@ -175,6 +186,7 @@ export default {
                 .then(res => {
                     if (res.status === 200) {
                         this.sourceData = res.data;
+                        this.content = this.sourceData;
                         this.$refs.topProgress.done();
                     }
                 });
@@ -187,10 +199,13 @@ export default {
     box-sizing: border-box;
     width: 100%;
     min-height: 100%;
+    background-color: white;
     .the-body {
         padding: 0 !important;
         overflow-x: hidden;
         font-size: 16px;
+        left: 5%;
+        width: 90%;
     }
     .info {
         letter-spacing: 1px;
@@ -276,16 +291,7 @@ export default {
     }
 }
 
-.top {
-    padding: 10px;
-    background: red;
-    margin-bottom: 100px;
-    color: #fff;
-    width: 100px;
-    height: 100px;
-    /*        text-align: center;*/
-    border-radius: 2px;
-}
+
 
 .page1 {
 
@@ -299,10 +305,10 @@ export default {
 }
 
 .shareAndPay {
-
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
     .line {
         background-color: lightgray;
         margin-top: 20px;
@@ -313,7 +319,7 @@ export default {
 
 .content {
     font-size: 13px;
-    font-style: italic;
+    /*    font-style: italic;*/
     display: block;
     -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
@@ -328,7 +334,7 @@ export default {
 }
 
 .profile {
-
+    background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -342,6 +348,8 @@ export default {
         margin-top: 20px;
         font-size: 14px;
         margin-bottom: 20px;
+        margin-right: 30px;
+        margin-left: 30px;
     }
     .headImage {
         width: 80px;
@@ -356,15 +364,24 @@ export default {
         font-style: italic;
         color: #999;
         margin-left: 10px;
-        &:hover{
-            color:black;
-        };
+        &:hover {
+            color: black;
+        }
+        ;
     }
     .address {
         font-size: 13px;
         font-style: italic;
     }
 }
+.top {
+        padding: 10px;
+        margin-right: -20px;
+        margin-bottom: -100px;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+    }
 
 @media only screen and (max-width: 640px) {
     .gitment-editor-login {

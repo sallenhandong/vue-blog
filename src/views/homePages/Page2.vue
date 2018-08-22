@@ -1,6 +1,5 @@
 <template>
-  <div class="page2" :class="{show: isShow, mobile: !isPc}">
-    <!--   <Menus @playChange="playChange"></Menus> -->
+  <div class="page2">
       <div ref="bodyBox" class="body-box" @mousewheel.stop @DOMMouseScroll.stop>
           <router-view></router-view>
       </div>
@@ -10,13 +9,15 @@
 <script>
 import Menus from "../../components/Menus.vue";
 import { isPc } from "../../util/tools";
+import { blogStyle } from "../../config";
 export default {
   name: "page2",
   data: function() {
     return {
       isPc: isPc(),
       isShow: false,
-      scrollDom: null
+      scrollDom: null,
+      blogStyle:""
     };
   },
   props: {
@@ -32,6 +33,7 @@ export default {
     }
   },
   mounted() {
+    this.blogStyle = blogStyle;
     if (this.pageNow === 1) {
       this.isShow = true;
     }
@@ -49,15 +51,11 @@ export default {
   display: flex;
   .body-box {
     flex: auto;
-    padding: 32px;
+    padding: 0px;
+    background-color: white;
     box-sizing: border-box;
     overflow-y: auto;
     overflow-x: hidden;
-  }
-  &.mobile {
-    .body-box {
-      padding-top: 64px;
-    }
   }
 }
 </style>

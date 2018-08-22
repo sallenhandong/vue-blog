@@ -1,27 +1,32 @@
 <template>
     <div class="live-box">
         <div class="page1">
-            <div class="shadow all_trans1s"></div>
+            <!--      <div class="shadow all_trans1s"></div> -->
             <div class="info-box">
-                <span class="all_trans1s title">{{blogName}}</span>
-                <div class="all_trans1s">{{blogSignature}}</div>
-                <div class="all_trans1s">{{blogSignatureEn}}</div>
+                <span class="title">{{blogName}}</span>
+                <div class="content">{{blogSignature}}</div>
+                <div class="content">{{blogSignatureEn}}</div>
             </div>
         </div>
-        <transition-group name="list" tag="ul" class="live">
-            <ArtiveList v-for="(v, index) in pageNowData" :thisData="v" :key="index"></ArtiveList>
-        </transition-group>
-        <!--         <div class="nothing" v-if="!pageNowData.length">
-            <img :src="ImgLoading" />
-            <div>正在加载请稍候…</div>
-        </div> -->
+        <appHeader></appHeader>
+        <div class="container">
+            <transition-group name="list" tag="ul" class="live" :style="computeStyle">
+                <ArtiveList v-for="(v, index) in pageNowData" :thisData="v" :key="index"></ArtiveList>
+            </transition-group>
+            <div v-if="blogStyle==1" class="newArticle">
+                <div class="articleTitle">最新文章</div>
+                <div class="content">
+                    <NewArtiveList v-for="(v, index) in pageNowData" :thisData="v" :key="index"></NewArtiveList>
+                </div>
+            </div>
+        </div>
         <div class="pagin">
             <Pagination :total="total" :current-page="pageNow" layout="total, prev, pager, next" @current-change="onPageChange"></Pagination>
         </div>
+        <footerView></footerView>
         <vm-back-top :bottom="100" :duration="1000" :timing="'ease'">
-            <div class="top">返回顶端</div>
+            <div class="top"><img :src="backTopImage"></div>
         </vm-back-top>
-        <Page3></Page3>
     </div>
 </template>
 <script>
@@ -29,13 +34,17 @@
 import { mapState } from "vuex";
 import { Pagination, Breadcrumb, BreadcrumbItem } from "element-ui";
 import ArtiveList from "../../components/ArtiveList.vue";
+import NewArtiveList from "../../components/NewArtiveList.vue";
 import { sortDate } from "../../util/tools";
 import ImgLoading from "../../assets/loading.gif";
 import ImgLogo from "../../assets/logo.png";
 import Vue from 'vue'
 import VmBackTop from 'vue-multiple-back-top'
-import Page3 from "../homePages/Page3.vue";
-import {blogName, blogSignature,blogSignatureEn} from "../../config";
+import footerView from "../homePages/footerView.vue";
+import { blogName, blogSignature, blogSignatureEn, backTopImage, blogStyle } from "../../config";
+import { scrollTop } from './assist';
+import appHeader from "../../components/header.vue";
+import { isPc } from "../..//util/tools";
 Vue.component(VmBackTop.name, VmBackTop)
 export default {
     name: "live",
@@ -49,7 +58,10 @@ export default {
             ImgLogo,
             blogName,
             blogSignature,
-            blogSignatureEn
+            blogSignatureEn,
+            backTopImage,
+            blogStyle,
+            isPc: isPc(),
         };
     },
     components: {
@@ -57,16 +69,27 @@ export default {
         Pagination,
         Breadcrumb,
         BreadcrumbItem,
-        Page3
+        footerView,
+        appHeader,
+        NewArtiveList
     },
     mounted() {
         const temp = this.listData;
         for (let i = 0; temp[i]; i++) {
             setTimeout(() => this.pageNowData.push(temp[i]), (i + 1) * 100);
         }
-
+        this.blogSignature = blogSignature;
+        this.blogSignatureEn = blogSignatureEn;
+        this.blogName = blogName;
+        this.blogStyle = blogStyle;
     },
     computed: {
+        computeStyle() {
+            if (this.isPc) {
+                return { width:  blogStyle == 2  ? 100 + `\%`:  70 + `\%`  }
+            }
+            
+        },
         ...mapState({
             listData(state) {
                 if (!state.app.blogConfig) {
@@ -74,15 +97,13 @@ export default {
                     return [];
                 }
                 this.total = state.app.blogList.length;
-                this.blogSignature = blogSignature;
-                this.blogSignatureEn = blogSignatureEn;
-                this.blogName = blogName;
                 return sortDate(state.app.blogList, state.app.blogConfig.d).filter(
                     (item, index) =>
                     index >= (this.pageNow - 1) * 10 && index < this.pageNow * 10
                 );
             }
         })
+
     },
     watch: {
         listData(newV) {
@@ -102,15 +123,6 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.list-enter-active {
-    transition: all 500ms;
-}
-
-.list-enter,
-.list-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
-}
 
 .live-box {
     position: relative;
@@ -119,40 +131,17 @@ export default {
     width: 100%;
     box-sizing: border-box;
     min-height: 100%;
+    background-color: #f5f5f5;
+    /* overflow: hidden;*/
     .live {
-        display: block;
-        width: 100%;
-        flex: auto;
+        width: 70%;
         min-height: 300px;
-        &li+li {
-            margin-top: 16px;
-        }
-    }
-    .nothing {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 100%;
-        transform: translateY(-50%);
-        text-align: center;
-        color: #888;
-        div {
-            margin-top: 8px;
-        }
+
+        left: 0px;
     }
     .pagin {
         margin-top: 8px;
         flex: none;
-    }
-    .bread {
-        display: flex;
-        align-items: center;
-        padding-bottom: 16px;
-        i {
-            margin-right: 8px;
-            margin-left: -5px;
-            color: #0acb79;
-        }
     }
     .page1 {
         display: flex;
@@ -165,9 +154,6 @@ export default {
         background-size: cover;
         background-position: top center;
         margin-bottom: 20px;
-        margin-left: -40px;
-        margin-right: -40px;
-        margin-top: -40px;
         &.show {
             .shadow {
                 opacity: 0.9;
@@ -204,10 +190,11 @@ export default {
             color: #d0d0d0;
             text-align: center;
             z-index: 2;
-            font-size: 15px;
             &>div {
+                color: white;
                 letter-spacing: 1px;
                 opacity: 1;
+                font-size: 15px;
                 &:hover {
                     color: deepskyblue;
                 }
@@ -225,22 +212,60 @@ export default {
                 }
             }
         }
-        .down {
-            flex: none;
-            margin-bottom: 16px;
-            width: 16px;
-            z-index: 2;
-            animation: animate-down 1s;
-            animation-iteration-count: infinite;
-        }
     }
     .top {
         padding: 10px;
-        background: red;
-        margin-bottom: 100px;
+        margin-right: -20px;
+        margin-bottom: -100px;
         color: #fff;
         text-align: center;
         border-radius: 2px;
+    }
+    .newArticle {
+        width: 20%;
+        border-radius: 10px;
+        background-color: white;
+        min-height: 220px;
+        max-height: 220px;
+        .articleTitle {
+            text-align: left;
+            top: 10px;
+            border-bottom: 1px solid #eee;
+            padding: 0 30px;
+            box-shadow: 0 2px 5px -1px rgba(0, 0, 0, .05);
+            color: rgba(0, 0, 0, .4);
+            line-height: 35px;
+        }
+        .content {
+            top: 10px;
+        }
+        li {
+            text-align: left;
+        }
+    }
+    .container {
+        display: flex;
+        flex-direction: row;
+
+    }
+}
+
+@media all and (max-width: 600px) {
+    .live-box {
+        .live {
+            width: 100%;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            .newArticle {
+                left: 7%;
+                width: 90%;
+            }
+            .content {
+                font-size: 14px;
+            }
+        }
     }
 }
 </style>

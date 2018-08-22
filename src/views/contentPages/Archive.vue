@@ -1,14 +1,9 @@
 <template>
     <div class="live-box">
-       <h3>归档</h3>
-        
+           <ArchiveDetail></ArchiveDetail>
         <transition-group name="list" tag="ul" class="live">
             <ArchiveList v-for="(v, index) in pageNowData" :thisData="v" :key="index"></ArchiveList>
         </transition-group>
-<!--         <div class="nothing" v-if="!pageNowData.length">
-            <img :src="ImgLoading" />
-            <div>正在加载请稍候…</div>
-        </div> -->
         <div class="pagin">
             <Pagination
                     :total="total"
@@ -21,20 +16,20 @@
 </template>
 
 <script>
-/** 文章列表页 **/
 import { mapState } from "vuex";
 import { Pagination, Breadcrumb, BreadcrumbItem } from "element-ui";
 import { sortDate } from "../../util/tools";
 import ImgLoading from "../../assets/loading.gif";
 import ArchiveList from  "../../components/ArchiveList.vue";
+import ArchiveDetail from "../homePages/ArchiveDetail.vue";
 export default {
-  name: "live",
+  name: "archive",
   data: function() {
     return {
       ImgLoading,
       pageNow: 1,
-      pageSize: 10,
-      total: 5,
+      pageSize: 20,
+      total: 0,
       pageNowData: [],
       monthArr:[]
     };
@@ -43,7 +38,8 @@ export default {
     Pagination,
     Breadcrumb,
     BreadcrumbItem,
-    ArchiveList
+    ArchiveList,
+    ArchiveDetail
   },
   mounted() {
     const temp = this.listData;
@@ -103,6 +99,7 @@ export default {
   width: 100%;
   box-sizing: border-box;
   min-height: 100%;
+  background-color: white;
   .live {
     display: block;
     width: 100%;

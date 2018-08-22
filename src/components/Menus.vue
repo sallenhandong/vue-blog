@@ -72,22 +72,6 @@ export default {
     },
     onLinkClick(url) {
       this.$router.push(url);
-
-      var title = "Sallen Slim's Blog";
-      if ( url == "/") {
-        title = "首页";
-      }else if(url == "/archive"){
-        title = "归档";
-      }else if(url == "/tag"){
-        title = "标签";
-      }else if(url == "/link_url"){
-        title = "友链";
-      }else if(url == "/about"){
-        title = "关于";
-      }else{
-        title = "Sallen Slim's Blog";
-      }
-      document.title = title;
       if (!this.isPc) {
         // 移动端，自动关闭Menu
         this.menuOpen = false;

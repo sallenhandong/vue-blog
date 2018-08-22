@@ -1,13 +1,5 @@
 <template>
-    <div class="work-box">
-      <h3>标签</h3>
-<!--         <div class="bread">
-            <i class="el-icon-location"></i>
-            <Breadcrumb>
-                <BreadcrumbItem to="/all">博客列表</BreadcrumbItem>
-                <BreadcrumbItem>个人作品</BreadcrumbItem>
-            </Breadcrumb>
-        </div> -->
+    <div class="tag">
 
         <TagList class="swiper-slide" v-for="(v, index) in pageNowData" :thisData="v" :key="index"></TagList>
       <!--   <transition-group name="list" tag="ul" class="live">
@@ -107,12 +99,13 @@ export default {
   opacity: 0;
   transform: translateY(30px);
 }
-.work-box {
+.tag {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  background-color: white;
   min-height: 100%;
   .live {
     display: block;
